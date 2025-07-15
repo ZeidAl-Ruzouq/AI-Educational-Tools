@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select a Student</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+
+        .student-selection {
+            margin: 20px auto;
+            width: 50%;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Select a Student</h1>
+    <div class="student-selection">
+        <select id="studentList">
+            <option value="" disabled selected>Select a student</option>
+            <option value="Zeid">Zeid</option>
+            <option value="Louie">Louie</option>
+        </select>
+        <button onclick="selectStudent()">Proceed</button>
+    </div>
+    <script>
+        function selectStudent() {
+            const selectedStudent = document.getElementById('studentList').value;
+            if (selectedStudent) {
+                // Navigate to student.html with the selected student as a query parameter
+                window.location.href = `student.html?student=${selectedStudent}`;
+            } else {
+                alert('Please select a student.');
+            }
+        }
+    </script>
+</body>
+</html>

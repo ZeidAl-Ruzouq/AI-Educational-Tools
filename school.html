@@ -1,0 +1,416 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: url('./Screenshots/schoolweb.png') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+        }
+
+        .gif-container {
+            position: absolute;
+            right: 5%;
+            top: 70%;
+            transform: translateY(-50%);
+            display: none;
+        }
+
+        .Griffin-button {
+            position: fixed;
+            top: 52px;
+            right: 55%;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .Griffin-button:hover::after {
+            content: "Make a call to the Griffin!";
+            position: absolute;
+            top: 22px;
+            right: 33px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            font-size: 10px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+
+        .intro-message {
+            position: absolute;
+            right: 14%;
+            bottom: 37%;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            cursor: pointer;
+            max-width: 200px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: none; /* Initially hidden */
+        }
+
+        .chat-box {
+            position: absolute;
+            right: 0%;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 1px solid #000;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            width: 300px;
+            height: 300px;
+            display: none;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            cursor: move;
+            user-select: none;
+        }
+
+        .chat-box .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding-bottom: 10px;
+        }
+
+        .messages-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .messages-container::-webkit-scrollbar-thumb {
+            background: #aaa;
+            border-radius: 4px;
+        }
+
+        .messages-container::-webkit-scrollbar-thumb:hover {
+            background: #888;
+        }
+
+        .message {
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            word-wrap: break-word;
+            max-width: 80%;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background-color: rgba(200, 200, 255, 0.8);
+            border: 1px solid #000;
+        }
+
+        .bot-message {
+            align-self: flex-start;
+            background-color: rgba(255, 255, 255, 0.8);
+            border: 1px solid #ccc;
+        }
+
+        .input-container {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            gap: 10px;
+        }
+
+        .input-container input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .input-container button {
+            padding: 8px 12px;
+            background-color: #000000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        .input-container button:hover {
+            background-color: #000000;
+        }
+
+        /* Resizers */
+        .resizer {
+            position: absolute;
+            background: transparent;
+            z-index: 1;
+        }
+
+        .resizer.top-left,
+        .resizer.top-right,
+        .resizer.bottom-left,
+        .resizer.bottom-right {
+            width: 12px;
+            height: 12px;
+            background: black;
+            border-radius: 50%;
+        }
+
+        .resizer.top-left {
+            left: -6px;
+            top: -6px;
+            cursor: nwse-resize;
+        }
+
+        .resizer.top-right {
+            right: -6px;
+            top: -6px;
+            cursor: nesw-resize;
+        }
+
+        .resizer.bottom-left {
+            left: -6px;
+            bottom: -6px;
+            cursor: nesw-resize;
+        }
+
+        .resizer.bottom-right {
+            right: -6px;
+            bottom: -6px;
+            cursor: nwse-resize;
+        }
+
+        .resizer.top,
+        .resizer.bottom {
+            height: 6px;
+            left: 50%;
+            width: 50px;
+            transform: translateX(-50%);
+            background: black;
+            cursor: ns-resize;
+        }
+
+        .resizer.top {
+            top: -3px;
+        }
+
+        .resizer.bottom {
+            bottom: -3px;
+        }
+
+        .resizer.left,
+        .resizer.right {
+            width: 6px;
+            top: 50%;
+            height: 50px;
+            transform: translateY(-50%);
+            background: black;
+            cursor: ew-resize;
+        }
+
+        .resizer.left {
+            left: -3px;
+        }
+
+        .resizer.right {
+            right: -3px;
+        }
+    </style>
+</head>
+<body>
+    <div id="gif-container" class="gif-container">
+        <img src="images/dungeons-and-dragons-monster.gif" alt="Dungeons And Dragons Monster" style="width: 125px; height: auto;">
+    </div>
+    <div id="intro-message" class="intro-message">
+        🦅 Greetings, fellow Griffin! How may I assist you? Ask me about school programs, schedules, or anything else — in any language!
+    </div>
+    <div id="chat-box" class="chat-box">
+        <div id="messages-container" class="messages-container"></div>
+        <div class="input-container">
+            <input type="text" id="chat-input" placeholder="Type your message...">
+            <button onclick="sendMessage()">Chat</button>
+        </div>
+        <div class="resizer top-left"></div>
+        <div class="resizer top-right"></div>
+        <div class="resizer bottom-left"></div>
+        <div class="resizer bottom-right"></div>
+        <div class="resizer top"></div>
+        <div class="resizer right"></div>
+        <div class="resizer bottom"></div>
+        <div class="resizer left"></div>
+    </div>
+    <div class="Griffin-button" id="Griffin-button" onclick="toggleChat()">🦅</div>
+
+    <script>
+        let isFirstMessage = true;
+        let guidelines = '';
+
+        async function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+
+            if (message !== '') {
+            const userMessage = document.createElement('div');
+            userMessage.className = 'message user-message';
+            userMessage.textContent = message;
+            messagesContainer.appendChild(userMessage);
+            input.value = '';
+            const botPlaceholder = document.createElement('div');
+            botPlaceholder.className = 'message bot-message';
+            botPlaceholder.textContent = 'Typing...';
+            messagesContainer.appendChild(botPlaceholder);
+
+            if (isFirstMessage) {
+                guidelines = `
+                Chatbot Instructions for Dutchtown High School:
+
+                Basic Information:
+                If asked about Dutchtown High School, respond with: "Dutchtown High School is a public high school located in Geismar, Louisiana, established in 2003. It serves students in grades 9 through 12 as part of the Ascension Parish School Board. The school's mascot is the Griffin, and its colors are silver, black, and purple."
+
+                Academics:
+                If asked about academic programs, say: "Dutchtown High School offers a range of academic programs, including Honors and Advanced Placement (AP) courses, Dual Enrollment opportunities in partnership with local universities, and specialized career pathways such as the Allied Health Center, which prepares students for careers in emergency health care, nursing, and sports medicine."
+
+                Freshman Academy:
+                If asked about support for new students, say: "The Freshman Academy at Dutchtown High provides a supportive environment for incoming ninth graders by organizing them into teams that share the same core subject teachers. This helps build collaboration and community among students. A dedicated Freshman Academy building was opened in 2017 to serve over 600 freshmen."
+
+                Extracurricular Activities:
+                If asked about extracurriculars, say: "Dutchtown High offers a variety of extracurricular activities, including clubs like 4H, DECA, National Honor Society, and an award-winning band program known as 'The Dutchtown Sound.' The marching band has earned notable achievements, including being named Grand Champions at the Louisiana Showcase of Marching Bands in 2023."
+
+                Athletics:
+                If asked about sports, say: "Dutchtown High competes in the Louisiana High School Athletic Association (LHSAA) with sports including football, basketball, soccer, and track and field. The school has produced notable athletes such as NFL players Eddie Lacy, Eric Reid, and Landon Collins."
+
+                Mission Statement:
+                If asked about the school’s mission, say: "Dutchtown High's mission is to provide an environment of educational excellence and create a legacy of lifelong learning. The school focuses on collaboration, results, and ensuring all students learn effectively."
+
+                General Guidance:
+                If the question is about something not listed, say: "Dutchtown High School is committed to supporting its students, staff, and parents. For detailed or specific inquiries, you can visit the school’s website at dutchtownhigh.ascensionschools.org."
+                `;
+                isFirstMessage = false;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/api/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt: guidelines + message }),
+                });
+
+                const data = await response.json();
+                botPlaceholder.textContent = data.response || 'Error: No response from server.';
+            } catch (error) {
+                botPlaceholder.textContent = 'Error: Could not retrieve response.';
+                console.error('Error:', error);
+            }
+            }
+        }
+        const chatBox = document.getElementById('chat-box');
+        const messagesContainer = document.getElementById('messages-container');
+        const gifContainer = document.getElementById('gif-container');
+        const GriffinButton = document.getElementById('Griffin-button');
+        const introMessage = document.getElementById('intro-message');
+        const introGif = document.getElementById('intro-gif');
+
+        GriffinButton.addEventListener('click', () => {
+            gifContainer.style.display = 'block';
+            introMessage.style.display = 'block';
+            GriffinButton.style.display = 'none'; // Hide the Griffin button after click
+        });
+
+        introMessage.addEventListener('click', () => {
+            const introText = document.createElement('div');
+            introText.className = 'message bot-message';
+            introText.textContent = introMessage.textContent;
+            messagesContainer.appendChild(introText);
+
+            introMessage.style.display = 'none';
+            gifContainer.style.display = 'none';
+            chatBox.style.display = 'block';
+        });
+
+        chatBox.addEventListener('mousedown', (e) => {
+            if (e.target.classList.contains('resizer')) return;
+            isDragging = true;
+            dragOffsetX = e.clientX - chatBox.getBoundingClientRect().left;
+            dragOffsetY = e.clientY - chatBox.getBoundingClientRect().top;
+            window.addEventListener('mousemove', drag);
+            window.addEventListener('mouseup', stopDrag);
+        });
+
+        function drag(e) {
+            if (!isDragging) return;
+            chatBox.style.left = (e.clientX - dragOffsetX) + 'px';
+            chatBox.style.top = (e.clientY - dragOffsetY) + 'px';
+        }
+
+        function stopDrag() {
+            isDragging = false;
+            window.removeEventListener('mousemove', drag);
+            window.removeEventListener('mouseup', stopDrag);
+        }
+        let originalWidth, originalHeight, originalX, originalY, originalMouseX, originalMouseY;
+        const resizers = document.querySelectorAll('.resizer');
+
+        resizers.forEach(resizer => {
+            resizer.addEventListener('mousedown', e => {
+                e.preventDefault();
+                originalWidth = parseFloat(getComputedStyle(chatBox).getPropertyValue('width').replace('px', ''));
+                originalHeight = parseFloat(getComputedStyle(chatBox).getPropertyValue('height').replace('px', ''));
+                originalX = chatBox.getBoundingClientRect().left;
+                originalY = chatBox.getBoundingClientRect().top;
+                originalMouseX = e.clientX;
+                originalMouseY = e.clientY;
+
+                window.addEventListener('mousemove', resize);
+                window.addEventListener('mouseup', stopResize);
+            });
+
+            function resize(e) {
+                const dx = e.clientX - originalMouseX;
+                const dy = e.clientY - originalMouseY;
+
+                if (resizer.classList.contains('bottom-right')) {
+                    chatBox.style.width = (originalWidth + dx) + 'px';
+                    chatBox.style.height = (originalHeight + dy) + 'px';
+                } else if (resizer.classList.contains('bottom-left')) {
+                    chatBox.style.width = (originalWidth - dx) + 'px';
+                    chatBox.style.height = (originalHeight + dy) + 'px';
+                    chatBox.style.left = (originalX + dx) + 'px';
+                } else if (resizer.classList.contains('top-right')) {
+                    chatBox.style.width = (originalWidth + dx) + 'px';
+                    chatBox.style.height = (originalHeight - dy) + 'px';
+                    chatBox.style.top = (originalY + dy) + 'px';
+                } else if (resizer.classList.contains('top-left')) {
+                    chatBox.style.width = (originalWidth - dx) + 'px';
+                    chatBox.style.height = (originalHeight - dy) + 'px';
+                    chatBox.style.left = (originalX + dx) + 'px';
+                    chatBox.style.top = (originalY + dy) + 'px';
+                } else if (resizer.classList.contains('top')) {
+                    chatBox.style.height = (originalHeight - dy) + 'px';
+                    chatBox.style.top = (originalY + dy) + 'px';
+                } else if (resizer.classList.contains('bottom')) {
+                    chatBox.style.height = (originalHeight + dy) + 'px';
+                } else if (resizer.classList.contains('left')) {
+                    chatBox.style.width = (originalWidth - dx) + 'px';
+                    chatBox.style.left = (originalX + dx) + 'px';
+                } else if (resizer.classList.contains('right')) {
+                    chatBox.style.width = (originalWidth + dx) + 'px';
+                }
+            }
+
+            function stopResize() {
+                window.removeEventListener('mousemove', resize);
+                window.removeEventListener('mouseup', stopResize);
+            }
+        });
+    </script>
+</html>
