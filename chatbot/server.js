@@ -1,3 +1,4 @@
+const path = require("node:path");
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -9,13 +10,17 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Initialize Google Generative AI
-const genAI = new GoogleGenerativeAI("Get your API key from https://console.cloud.google.com/apis/credentials");
-const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+const { GEMINI_API_KEY, GEMINI_MODEL } = process.env;
+if (!GEMINI_API_KEY || !GEMINI_MODEL) {
+    throw new Error("Set GEMINI_API_KEY and GEMINI_MODEL before starting the chatbot.");
+}
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: GEMINI_MODEL });
 
 // Google Sheets API Setup
-const SHEET_ID = " get your Google Sheets ID from the URL of your sheet";
+const SHEET_ID = process.env.GOOGLE_SHEET_ID;
 const auth = new google.auth.GoogleAuth({
-    keyFile: "g.json", // Path to service account JSON
+    keyFile: process.env.GOOGLE_APPLICATION_CREDENTIALS || path.join(__dirname, "g.json"),
     scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
 });
 const sheets = google.sheets({ version: "v4", auth });

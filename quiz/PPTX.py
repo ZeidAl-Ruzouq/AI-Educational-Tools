@@ -23,8 +23,12 @@ app.add_middleware(
 )
 
 # Configure Gemini
-genai.configure(api_key="get your API key from https://console.cloud.google.com/apis/credentials")
-model = genai.GenerativeModel("gemini-1.5-flash")
+gemini_api_key = os.getenv("GEMINI_API_KEY")
+gemini_model = os.getenv("GEMINI_MODEL")
+if not gemini_api_key or not gemini_model:
+    raise RuntimeError("Set GEMINI_API_KEY and GEMINI_MODEL before starting the quiz API.")
+genai.configure(api_key=gemini_api_key)
+model = genai.GenerativeModel(gemini_model)
 
 
 def normalize_json(text: str) -> str:

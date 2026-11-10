@@ -1,29 +1,23 @@
-# AI-Educational-Tools
+# AI Educational Tools
 
-This project contains two AI-powered tools designed to enhance school websites and automate educational tasks:
+Ask the Griffin chatbot about school clubs or schedules, or turn a PowerPoint into a practice quiz. These are two separate classroom prototypes.
 
-- 🤖 **AI Chatbot for School Websites**  
-  A web-based chatbot that helps students and parents by answering questions using Google Gemini AI and student-specific data from Google Sheets.
+| Tool | What you can do | Where to look |
+| --- | --- | --- |
+| **School Chat** | Ask a school question or switch to the student view for answers based on a Google Sheet. [Watch the demo](https://drive.google.com/file/d/1jBKHtJOBXWiduUyuQH9H6FIf7EdXkjUK/view?usp=sharing) | [chatbot/](chatbot/) has the Node server. [chatbot/web/](chatbot/web/) has the role picker and both chat screens. |
+| **PowerPoint to Quiz** | Pick slides, set the difficulty, answer questions, and ask for a hint. [Watch the demo](https://drive.google.com/file/d/1YQQbW7VBu-ls6nfOZ_llD1xeCN7WNZ8R/view?usp=drive_link) | [quiz/](quiz/) has the Python API and dependencies. [quiz/web/](quiz/web/) has the upload and quiz screen. |
 
-Demo: https://drive.google.com/file/d/1jBKHtJOBXWiduUyuQH9H6FIf7EdXkjUK/view?usp=sharing
+The pages open locally for a preview. To generate answers or quizzes, start the matching backend and set up Gemini. The student view also needs Google Sheets, and slide previews use PowerPoint on Windows. [Setup instructions](SETUP.md)
 
-- 📄 **PPTX-to-Quiz Generator**  
-  A tool that converts PowerPoint presentations into multiple-choice quizzes using Gemini AI, ideal for teachers preparing assessments.
+## Screenshots
 
-Demo: https://drive.google.com/file/d/1YQQbW7VBu-ls6nfOZ_llD1xeCN7WNZ8R/view?usp=drive_link 
-  
----
-
-## 📁 Project Structure
-
-### AI Chatbot
-- `school.html`
-- `student.html`
-- `student-selection.html`
-- `server.js`
-- `package.json`
-
-### PPTX-to-Quiz
-- `PPTX.html`
-- `PPTX.py`
-- `requirements.txt`
+<table>
+  <tr>
+    <th>School chat</th>
+    <th>Quiz setup</th>
+  </tr>
+  <tr>
+    <td><img src="screenshots/school-chat.jpg" alt="School chat with an example question about clubs" width="250"></td>
+    <td><img src="screenshots/quiz-builder.jpg" alt="Quiz builder with difficulty controls and the PowerPoint upload area" width="435"></td>
+  </tr>
+</table>
